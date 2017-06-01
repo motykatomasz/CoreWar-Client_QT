@@ -39,7 +39,10 @@ void FileSystemDialog::showFiles(const QModelIndex & index)
 
 QString FileSystemDialog::getPath()
 {	
-	return WarriorFile;
+	if (WarriorFile != 0l)
+		return WarriorFile;
+	else
+		return "";
 }
 
 void FileSystemDialog::setPath(const QModelIndex & index)

@@ -3,7 +3,6 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_QtClient.h"
 #include <QTcpSocket>
-#include "addressbook.pb.h"
 #include "SettingsWindow.h"
 #include "GameWindow.h"
 #include "Settings.h"

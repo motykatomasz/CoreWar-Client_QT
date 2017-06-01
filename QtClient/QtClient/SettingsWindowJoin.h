@@ -19,6 +19,7 @@ private:
 	Ui::SettingsWindowJoin ui;
 	QVector<QString> available_instructions;		//kolekcja dostêpnych instrukcji
 	QTcpSocket* socket;						//gniazdo tcp do komunikacji z serwerem
+	bool isVerified;
 
 	private slots:
 
@@ -56,4 +57,6 @@ private:
 	* @brief Metoda zamykaj¹ca okno ustawieñ
 	*/
 	void hide();
+
+	void unverify();
 };

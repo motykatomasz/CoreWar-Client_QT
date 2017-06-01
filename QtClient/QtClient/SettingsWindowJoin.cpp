@@ -11,6 +11,7 @@ SettingsWindowJoin::SettingsWindowJoin(QTcpSocket* socket, QWidget *parent)
 	connect(ui.fileButton, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 	connect(fwindow->ui.selectButton, SIGNAL(clicked()), this, SLOT(showWarrior()));
 	connect(ui.verifyButton, SIGNAL(clicked()), this, SLOT(verifyWarrior()));
+	connect(ui.WarriorEditor, SIGNAL(textChanged()), this, SLOT(unverify()));
 
 	this->available_instructions.append("DAT");
 	this->available_instructions.append("MOV");
@@ -31,6 +32,8 @@ SettingsWindowJoin::SettingsWindowJoin(QTcpSocket* socket, QWidget *parent)
 	this->available_instructions.append("NOP");
 	this->available_instructions.append("LDP");
 	this->available_instructions.append("STP");
+
+	isVerified = false;
 }
 
 SettingsWindowJoin::~SettingsWindowJoin()
@@ -134,4 +137,9 @@ void SettingsWindowJoin::hide()
 	ui.nameLine->clear();
 	this->close();
 
+}
+
+void SettingsWindowJoin::unverify()
+{
+	isVerified = false;
 }

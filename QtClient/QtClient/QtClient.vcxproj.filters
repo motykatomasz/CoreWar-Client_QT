@@ -156,7 +156,4 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\..\..\..\Desktop\studia\ZPR\protobuf-2.6.1\vsprojects\Debug\libprotobuf.lib" />
-  </ItemGroup>
 </Project>

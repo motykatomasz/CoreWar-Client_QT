@@ -12,6 +12,7 @@ SettingsWindow::SettingsWindow(QTcpSocket *socket, QWidget *parent)
 	connect(fwindow->ui.selectButton, SIGNAL(clicked()), this, SLOT(showWarrior()));
 	connect(ui.verifyButton, SIGNAL(clicked()), this, SLOT(verifyWarrior()));
 	connect(ui.createButton, SIGNAL(clicked()), this, SLOT(createSession()));
+	connect(ui.WarriorEditor, SIGNAL(textChanged()), this, SLOT(unverify()));
 	this->socket = socket;
 	this->available_instructions.append("DAT");
 	this->available_instructions.append("MOV");
@@ -35,6 +36,7 @@ SettingsWindow::SettingsWindow(QTcpSocket *socket, QWidget *parent)
 
 	ui.lineCore->setValidator(new QIntValidator(50, 1000, this));
 	ui.lineInstruction->setMaxLength(3);
+	isVerified = false;
 
 }
 
@@ -61,22 +63,42 @@ void SettingsWindow::showWarrior()
 	
 }
 
-void SettingsWindow::verifyWarrior()				
+void SettingsWindow::verifyWarrior()
 {
-	QString plainTextEditContents = ui.WarriorEditor->toPlainText();
-	QStringList lines = plainTextEditContents.split("\n");
-	QMessageBox msg;
 	QString str;
-	for (int i = 0; i < lines.size(); i++)
+	QMessageBox msg;
+	int n = 0;
+
+	if (ui.WarriorEditor->toPlainText() == "")
+		str = "Please specify warrior";
+	else if (ui.lineCore->text() == "")
 	{
-		qDebug() << lines[i];
-		verifyLine(lines[i], i+1, str);
+		str = "Please specify core size";
 	}
-	qDebug() << str;
+	else 
+	{
+		QString plainTextEditContents = ui.WarriorEditor->toPlainText();
+		QStringList lines = plainTextEditContents.split("\n");
+	
+	
+		for (int i = 0; i < lines.size(); i++)
+		{
+			qDebug() << lines[i];
+			verifyLine(lines[i], i + 1, str);
+			++n;
+		}
+		qDebug() << str;
 
-	if (str.isEmpty())
-		str = "Warrior is fine";
+		if (n > ui.lineCore->text().toInt() / 2)
+		{
+			str = "Too many instructions";
+		}
 
+		if (str.isEmpty()) {
+			str = "Warrior is fine";
+			isVerified = true;
+		}
+	}
 	msg.setText(str);
 	msg.exec();
 
@@ -120,7 +142,13 @@ void SettingsWindow::createSession()
 		msg.setText("Please specify all fields.");
 		msg.exec();
 	}
-	
+	else if (!isVerified)
+	{
+		QMessageBox msg;
+		msg.setText("Please verify warrior.");
+		msg.exec();
+
+	}
 	else {
 		out << (qint16)1;
 		out << (qint16)ui.lineCore->text().toInt();
@@ -141,6 +169,11 @@ bool SettingsWindow::isNumber(QString num)
 		isNumber = isNumber && k->isDigit();
 	}
 	return isNumber;
+}
+
+void SettingsWindow::unverify()
+{
+	isVerified = false;
 }
 
 SettingsWindow::~SettingsWindow()

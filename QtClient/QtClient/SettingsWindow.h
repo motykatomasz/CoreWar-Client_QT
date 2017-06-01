@@ -28,6 +28,7 @@ private:
 	Ui::SettingsWindow ui;
 	QVector<QString> available_instructions;	//kolekcja dostêpnych instrukcji
 	QTcpSocket* socket;						//gniazdo tcp do komunikacji z serwerem
+	bool isVerified;
 
 	private slots:
 	/**
@@ -64,5 +65,6 @@ private:
 	*/
 	bool isNumber(QString num);
 
+	void unverify();
 
 };

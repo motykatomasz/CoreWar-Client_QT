@@ -12,12 +12,13 @@ QtClient::QtClient(QWidget *parent)
 	connect(_pSocket, SIGNAL(readyRead()), this, SLOT(readTcpData()));
 	connect(ui.joinButton, SIGNAL(clicked()),this, SLOT(showJoinDialog()));
 	connect(ui.createButton, SIGNAL(clicked()), this, SLOT(showSettingsDialog()));
-	_pSocket->connectToHost("127.0.0.1", 9999);
+	connect(ui.testButton, SIGNAL(clicked()), this, SLOT(test()));
 	instructionColors = new QMap<QString, QString>();
 	instructionColors->insert("DAT", "red");
 	instructionColors->insert("MOV", "green");
 	instructionColors->insert("ADD", "blue");
 
+	connectTcp();
 
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(exitGame()));
@@ -27,13 +28,19 @@ QtClient::QtClient(QWidget *parent)
 
 
 
-// nie u¿ywane
+
 void QtClient::connectTcp()
 {
-	_pSocket->connectToHost("127.0.0.1", 9999);
-	if (_pSocket->waitForConnected()) {
-		createSession("abc");
+	_pSocket->connectToHost("192.168.43.168", 9999);
+	if (_pSocket->waitForConnected(5000)) 
+	{
+		qDebug() << "Connected";
 	}
+	else
+	{
+		qDebug() << "Not Connected";
+	}
+
 }
 
 void QtClient::showSettingsDialog()
@@ -67,7 +74,7 @@ void QtClient::readTcpData()
 
 	//stworzenie pocz¹tkowej planszy
 	if (msg_type == 3) 
-	{
+	{	
 		qint16 core;
 		QString ins;
 		QString warrior1;
@@ -142,7 +149,7 @@ void QtClient::putWarriorOnBoard(QString warrior, int core, bool front)
 		}
 		else
 		{
-			gwindow->Change_Instruction(core - i, instructionColors->value(list[0]));
+			gwindow->Change_Instruction(core - i -1, instructionColors->value(list[0]));
 		}		
 	}
 }
@@ -150,9 +157,10 @@ void QtClient::putWarriorOnBoard(QString warrior, int core, bool front)
 void QtClient::test()
 {
 	
-	showGameWindow(10, "blue");
+	showGameWindow(100, "blue");
+	gwindow->Change_Instruction(1, "green");
 
-	timer->start(5000);
+	//timer->start(5000);
 
 }
 
