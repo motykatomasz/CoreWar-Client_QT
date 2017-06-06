@@ -30,6 +30,18 @@ private:
 	QTcpSocket* socket;						//gniazdo tcp do komunikacji z serwerem
 	bool isVerified;
 
+	/**
+	* @brief Metoda zestawiaj¹ca po³¹czenie z serwerem
+	*/
+	void connectServer();
+
+	/**
+	* @brief Metoda sprawdzaj¹ca czy argument instrukcji jest liczb¹
+	* \param num argument do weyfikacji
+	* \return Czy argument poprawny
+	*/
+	bool isNumber(QString num);
+
 	private slots:
 	/**
 	* @brief Metoda wyœwietlaj¹ca okno systemu plików
@@ -47,6 +59,9 @@ private:
 
 	/**
 	* @brief Metoda weryfikuj¹ca pojedyncz¹ instrukcjê oraz jej argumenty
+	* \param currentLine aktualna linijka kodu wojownika
+	* \param i numer aktualnej linijki kodu wojownika
+	* \param str komunikat o b³edach do modyfikacji
 	*/
 	void verifyLine(QString currentLine, int i, QString& str);
 
@@ -61,10 +76,8 @@ private:
 	void createSession();
 
 	/**
-	* @brief Metoda sprawdzaj¹ca czy argument instrukcji jest liczb¹
+	* @brief Metoda zmieniaj¹ca stan weryfikacji wojownika
 	*/
-	bool isNumber(QString num);
-
 	void unverify();
 
 };

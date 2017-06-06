@@ -13,19 +13,6 @@
   <property name="windowTitle">
    <string>SettingsWindow</string>
   </property>
-  <widget class="QPushButton" name="saveButton">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>370</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -42,8 +29,8 @@
   <widget class="QLineEdit" name="lineCore">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>50</y>
+     <x>200</x>
+     <y>10</y>
      <width>111</width>
      <height>21</height>
     </rect>
@@ -147,14 +134,14 @@
   <widget class="QPushButton" name="createButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>290</y>
-     <width>75</width>
-     <height>23</height>
+     <x>40</x>
+     <y>280</y>
+     <width>191</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
-    <string>Create</string>
+    <string>Create Session</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineName">
@@ -178,6 +165,39 @@
    </property>
    <property name="text">
     <string>Session name</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboCore">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>50</y>
+     <width>101</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineIP">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>220</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>220</y>
+     <width>21</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>IP</string>
    </property>
   </widget>
  </widget>

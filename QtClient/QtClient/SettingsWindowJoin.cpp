@@ -40,13 +40,28 @@ SettingsWindowJoin::~SettingsWindowJoin()
 {
 }
 
+void SettingsWindowJoin::connectServer()
+{
+	QString ip = ui.lineIP->text();
+	socket->connectToHost(ip, 9999);
+	if (socket->waitForConnected(5000))
+	{
+		qDebug() << "Connected";
+	}
+	else
+	{
+		qDebug() << "Not Connected";
+	}
+
+}
+
 void SettingsWindowJoin::joinSession() 
 {
 	QByteArray block;
 	QDataStream out(&block, QIODevice::WriteOnly);
 	out.setVersion(QDataStream::Qt_4_0);
 
-	if (ui.nameLine->text().isEmpty() || ui.WarriorEditor->toPlainText().isEmpty())
+	if (ui.nameLine->text().isEmpty() || ui.WarriorEditor->toPlainText().isEmpty() || ui.lineIP->text().isEmpty())
 	{
 		QMessageBox msg;
 		msg.setText("Please specify all fields.");
@@ -58,6 +73,8 @@ void SettingsWindowJoin::joinSession()
 		out << (qint16)2;
 		out << ui.nameLine->text();
 		out << ui.WarriorEditor->toPlainText();
+
+		connectServer();
 
 		this->socket->write(block);
 		hide();
@@ -104,7 +121,7 @@ void SettingsWindowJoin::verifyWarrior()
 	msg.exec();
 }
 
-void SettingsWindowJoin::verifyLine(QString currentLine, int i, QString str)
+void SettingsWindowJoin::verifyLine(QString currentLine, int i, QString& str)
 {
 	QStringList list = currentLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
@@ -124,11 +141,20 @@ void SettingsWindowJoin::verifyLine(QString currentLine, int i, QString str)
 
 bool SettingsWindowJoin::isNumber(QString num)
 {
-	bool isNumber = true;
+	/*bool isNumber = true;
 	for (QString::const_iterator k = num.begin(); k != num.end(); ++k) {
 		isNumber = isNumber && k->isDigit();
 	}
-	return isNumber;
+	return isNumber;*/
+
+	QRegExp a1 = QRegExp("[#@*$-]\\d+");
+	QRegExp a2 = QRegExp("\\d+");
+	QRegExp a3 = QRegExp("[#@*$]\\-\\d+");
+
+	if (a1.exactMatch(num) || a2.exactMatch(num) || a3.exactMatch(num))
+		return true;
+	else
+		return false;
 }
 
 void SettingsWindowJoin::hide()

@@ -34,6 +34,11 @@ SettingsWindow::SettingsWindow(QTcpSocket *socket, QWidget *parent)
 	this->available_instructions.append("LDP");
 	this->available_instructions.append("STP");
 
+	ui.comboCore->addItem("100");
+	ui.comboCore->addItem("400");
+	ui.comboCore->addItem("2500");
+	ui.comboCore->addItem("10000");
+
 	ui.lineCore->setValidator(new QIntValidator(50, 1000, this));
 	ui.lineInstruction->setMaxLength(3);
 	isVerified = false;
@@ -71,10 +76,6 @@ void SettingsWindow::verifyWarrior()
 
 	if (ui.WarriorEditor->toPlainText() == "")
 		str = "Please specify warrior";
-	else if (ui.lineCore->text() == "")
-	{
-		str = "Please specify core size";
-	}
 	else 
 	{
 		QString plainTextEditContents = ui.WarriorEditor->toPlainText();
@@ -89,7 +90,7 @@ void SettingsWindow::verifyWarrior()
 		}
 		qDebug() << str;
 
-		if (n > ui.lineCore->text().toInt() / 2)
+		if (n > ui.comboCore->currentText().toInt() / 2)
 		{
 			str = "Too many instructions";
 		}
@@ -136,7 +137,7 @@ void SettingsWindow::createSession()
 	QDataStream out(&block, QIODevice::WriteOnly);
 	out.setVersion(QDataStream::Qt_4_0);
 
-	if (ui.lineCore->text().isEmpty() || ui.lineTurns->text().isEmpty() || ui.lineInstruction->text().isEmpty() || ui.lineName->text().isEmpty() || ui.WarriorEditor->toPlainText().isEmpty())
+	if (ui.lineTurns->text().isEmpty() || ui.lineInstruction->text().isEmpty() || ui.lineName->text().isEmpty() || ui.WarriorEditor->toPlainText().isEmpty() || ui.lineIP->text().isEmpty())
 	{
 		QMessageBox msg;
 		msg.setText("Please specify all fields.");
@@ -151,24 +152,52 @@ void SettingsWindow::createSession()
 	}
 	else {
 		out << (qint16)1;
-		out << (qint16)ui.lineCore->text().toInt();
+		out << (qint16)ui.comboCore->currentText().toInt();
+		//out << (qint16)ui.lineCore->text().toInt();
 		out << (qint16)ui.lineTurns->text().toInt();
 		out << ui.lineInstruction->text();
 		out << ui.WarriorEditor->toPlainText();
 		out << ui.lineName->text();
+
+		connectServer();
 
 		socket->write(block);
 		hide();
 	}
 }
 
+void SettingsWindow::connectServer()
+{
+	QString ip = ui.lineIP->text();
+	socket->connectToHost(ip, 9999);
+	if (socket->waitForConnected(5000))
+	{
+		qDebug() << "Connected";
+	}
+	else
+	{
+		qDebug() << "Not Connected";
+	}
+
+
+}
+
 bool SettingsWindow::isNumber(QString num)
 {
-	bool isNumber = true;
+	
+	QRegExp a1 = QRegExp("[#@*$-]\\d+");
+	QRegExp a2 = QRegExp("\\d+");
+	QRegExp a3 = QRegExp("[#@*$]\\-\\d+");
+
+	if (a1.exactMatch(num) || a2.exactMatch(num) || a3.exactMatch(num))
+		return true;
+	else
+		return false;
+	/*bool isNumber = true;
 	for (QString::const_iterator k = num.begin(); k != num.end(); ++k) {
 		isNumber = isNumber && k->isDigit();
 	}
-	return isNumber;
+	return isNumber;*/
 }
 
 void SettingsWindow::unverify()

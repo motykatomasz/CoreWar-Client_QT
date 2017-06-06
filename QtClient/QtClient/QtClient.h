@@ -23,12 +23,12 @@ public:
 
 private:
 	Ui::QtClientClass ui;
-	SettingsWindow *swindow;	//okno opcji tworzenia sesji
+	SettingsWindow *swindow;	/*!<okno opcji tworzenia sesji*/
 	SettingsWindowJoin * jwindow; //okno opcji do³¹czania do sesji
 	GameWindow *gwindow;		//okno gry
 	QTcpSocket *_pSocket;		//gniazdo do komunikacji
 	Settings *settings;			//ustawienia gry
-	QMap<QString, QString>* instructionColors; //s³ownik mapuj¹cy instrukcjê na przypisany jej kolor
+	QMap<QString, QColor>* instructionColors; //s³ownik mapuj¹cy instrukcjê na przypisany jej kolor
 
 	QTimer *timer;
 	private slots:
@@ -52,6 +52,9 @@ private:
 
 	/**
 	* @brief Metoda wyœwiwietlaj¹ca okno gry
+	*
+	* \param size rozmiar planszy
+	* \param color domyœlny kolor komórek planszy
 	*/
 	void showGameWindow(int size, const QColor& color);
 
@@ -62,6 +65,10 @@ private:
 	
 	/**
 	* @brief Metoda do wczytywania wojowników na planszê
+	*
+	* \param warrior kod wojownika
+	* \param core rozmiar planszy
+	* \param front punkt startowy wojownika
 	*/
 	void putWarriorOnBoard(QString warrior, int core, bool front);
 
